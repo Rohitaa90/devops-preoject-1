@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  backend:
+    volumes:
+      - ./backend/src:/app/src
+    command: npm run dev
+
+  frontend:
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    command: npm run dev

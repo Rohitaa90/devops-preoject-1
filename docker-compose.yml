@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: portfolio-backend
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=4000
+    volumes:
+      - ./backend/src/data:/app/src/data
+    networks:
+      - portfolio-network
+
+  frontend:
+    build: ./frontend
+    container_name: portfolio-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://backend:4000
+    depends_on:
+      - backend
+    networks:
+      - portfolio-network
+
+  nginx:
+    build: ./nginx
+    container_name: portfolio-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - portfolio-network
+
+networks:
+  portfolio-network:
+    driver: bridge
